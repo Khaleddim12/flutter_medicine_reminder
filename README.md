@@ -1,6 +1,10 @@
 # medicine_reminder
 
-A new Flutter project.
+Flutter App uses provider package for state
+management and sqflite package for local
+database saving to notify the user when to
+take the medicines he added into the app
+recently
 
 ## Getting Started
 
