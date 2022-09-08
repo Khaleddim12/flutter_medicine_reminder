@@ -54,21 +54,9 @@ class PillData extends ChangeNotifier {
   }
 
   Future deletePill(Pill pill) async {
-
-
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    // fetch your string list
-    List<String> mList = (prefs.getStringList('notifications') ?? <String>[]);
-
-    //convert your string list to your original int list
-    List<int> notifications_id = mList.map((i)=> int.parse(i)).toList();
-
-    for(int i = 0;i<notifications_id.length;i++){
-      print('delete ${notifications_id[i]}');
-      _notificationService.removeNotification(notifications_id[i], flutterLocalNotificationsPlugin);
-    }
     db.deletePill(pill.id!);
     allListOfPills.remove(pill);
+    _notificationService.removeNotification(pill.notifyId, flutterLocalNotificationsPlugin);
     notifyListeners();
   }
 

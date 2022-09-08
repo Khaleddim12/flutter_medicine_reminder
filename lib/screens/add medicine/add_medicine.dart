@@ -317,7 +317,7 @@ class _AddMedicineState extends State<AddMedicine> {
       }
       else {
         print("id = "+pill.id.toString());
-        for (int i = 0; i < howManyWeeks*7; i++) {
+        for (int i = 0; i < howManyWeeks; i++) {
 
             //set the notification schneudele
             tz.initializeTimeZones();
@@ -332,15 +332,8 @@ class _AddMedicineState extends State<AddMedicine> {
             pill.time = selectedDate.millisecondsSinceEpoch;
             pill.notifyId = Random().nextInt(10000000);
             print(pill.notifyId);
-            notifications.add(pill.notifyId);
+
           }
-        for (int i = 0; i < notifications.length ; i++) {
-          print(notifications[i]);
-        }
-        //save notifications to delete later.
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        List<String> stringsList=  notifications.map((i)=>i.toString()).toList();
-        prefs.setStringList("notifications", stringsList);
       }
 
       ScaffoldMessenger.of(context).showSnackBar(

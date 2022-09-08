@@ -23,66 +23,39 @@ class MedicineList extends StatelessWidget {
         return ListView.builder(
           itemBuilder: (context, index) {
             final medicine = medicines[index];
-            return MedicineCard(
-              delete: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Delete ?"),
-                    content: Text(
-                        "Are you sure to delete ${medicine.name} medicine?"),
-                    contentTextStyle:
-                        TextStyle(fontSize: 17.0, color: Colors.grey[800]),
-                    actions: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.resolveWith(
-                            (states) {
-                              return states.contains(MaterialState.pressed)
-                                  ? Colors.red
-                                  : null;
-                            },
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "Cancel",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.resolveWith(
-                            (states) {
-                              return states.contains(MaterialState.pressed)
-                                  ? Colors.red
-                                  : null;
-                            },
-                          ),
-                        ),
-                        onPressed: () async {
-                          await Provider.of<PillData>(context, listen: false)
-                              .deletePill(medicine);
-
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "Delete",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ],
+            return Dismissible(
+              key: UniqueKey(),
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.6,
+                DismissDirection.endToStart: 0.6,
+              },
+              onDismissed: (direction) async {
+                await Provider.of<PillData>(context, listen: false)
+                    .deletePill(medicine);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Todo deleted successfully'),
                   ),
                 );
               },
-              flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
-              setData: setData,
-              medicine: medicine,
+              background: Container(
+                color: Colors.red,
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              child: MedicineCard(
+                flutterLocalNotificationsPlugin:
+                    flutterLocalNotificationsPlugin,
+                setData: setData,
+                medicine: medicine,
+              ),
             );
           },
           itemCount: medicines.length,

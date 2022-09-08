@@ -40,11 +40,11 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id.toInt(),
         title,
+        matchDateTimeComponents: DateTimeComponents.time,
         description,
         tz.TZDateTime.now(tz.local).add(Duration(milliseconds: time)),
         const NotificationDetails(
           android: AndroidNotificationDetails(
-
             'medicines_id',
             'medicines',
             'medicines_notification_channel',
